@@ -38,12 +38,12 @@ MySeqTsHeader::MySeqTsHeader ()
 }
 
 void
-MySeqTsHeader::SetSeq (uint32_t seq)
+MySeqTsHeader::SetSeq (uint16_t seq)
 {
   NS_LOG_FUNCTION (this << seq);
   m_seq = seq;
 }
-uint32_t
+uint16_t
 MySeqTsHeader::GetSeq (void) const
 {
   NS_LOG_FUNCTION (this);
@@ -62,7 +62,7 @@ MySeqTsHeader::GetTypeId (void)
 {
   static TypeId tid = TypeId ("ns3::MySeqTsHeader")
     .SetParent<Header> ()
-    .SetGroupName("Applications")
+    .SetGroupName("Internet")
     .AddConstructor<MySeqTsHeader> ()
   ;
   return tid;
@@ -82,7 +82,7 @@ uint32_t
 MySeqTsHeader::GetSerializedSize (void) const
 {
   NS_LOG_FUNCTION (this);
-  return 4+8;
+  return 2+8;
 }
 
 void
@@ -90,7 +90,7 @@ MySeqTsHeader::Serialize (Buffer::Iterator start) const
 {
   NS_LOG_FUNCTION (this << &start);
   Buffer::Iterator i = start;
-  i.WriteHtonU32 (m_seq);
+  i.WriteHtonU16 (m_seq);
   i.WriteHtonU64 (m_ts);
 }
 uint32_t
@@ -98,7 +98,7 @@ MySeqTsHeader::Deserialize (Buffer::Iterator start)
 {
   NS_LOG_FUNCTION (this << &start);
   Buffer::Iterator i = start;
-  m_seq = i.ReadNtohU32 ();
+  m_seq = i.ReadNtohU16 ();
   m_ts = i.ReadNtohU64 ();
   return GetSerializedSize ();
 }

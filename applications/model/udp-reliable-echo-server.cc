@@ -162,7 +162,7 @@ UdpReliableEchoServer::HandleRead (Ptr<Socket> socket)
   Address from;
   Address localAddress;
   MySeqTsHeader seqTs;
-  uint32_t currentSeqNumber;
+  uint16_t currentSeqNumber;
   while ((packet = socket->RecvFrom (from)))
     {
       socket->GetSockName (localAddress);

@@ -97,7 +97,7 @@ UdpReliableEchoClient::UdpReliableEchoClient ()
   m_nextSeqNum = 0;
   m_waitingSeqNum = 0;
   m_sendQueueSize = 32786;
-  m_sendQueue = new uint32_t[m_sendQueueSize]();
+  m_sendQueue = new uint16_t[m_sendQueueSize]();
   m_sendQueueFront = 0;
   m_sendQueueBack = 0;
 }
@@ -344,7 +344,7 @@ UdpReliableEchoClient::Send (void)
     }
   Address localAddress;
   m_socket->GetSockName (localAddress);
-  uint32_t seqNum = GetSeqNum ();
+  uint16_t seqNum = GetSeqNum ();
   MySeqTsHeader seqTs;
   seqTs.SetSeq (seqNum);
   p->AddHeader (seqTs);
@@ -397,7 +397,7 @@ UdpReliableEchoClient::HandleRead (Ptr<Socket> socket)
   Address from;
   Address localAddress;
   MySeqTsHeader seqTs;
-  uint32_t seqNum;
+  uint16_t seqNum;
   while ((packet = socket->RecvFrom (from)))
     {
       packet->RemoveHeader (seqTs);
@@ -421,10 +421,10 @@ UdpReliableEchoClient::HandleRead (Ptr<Socket> socket)
     }
 }
 
-uint32_t
+uint16_t
 UdpReliableEchoClient::GetSeqNum (void)
 {
-  uint32_t seqNum;
+  uint16_t seqNum;
   if (m_sendQueueFront != m_sendQueueBack)
     {
       seqNum = m_sendQueue[m_sendQueueFront++];
@@ -443,7 +443,7 @@ UdpReliableEchoClient::GetSeqNum (void)
 }
 
 void
-UdpReliableEchoClient::AddAckSeqNum (uint32_t seqNum)
+UdpReliableEchoClient::AddAckSeqNum (uint16_t seqNum)
 {
   if (seqNum < m_waitingSeqNum)
     {
@@ -456,7 +456,7 @@ UdpReliableEchoClient::AddAckSeqNum (uint32_t seqNum)
   else
     {
       NS_LOG_INFO("Packet Loss: " << m_waitingSeqNum);
-      for (uint32_t i = m_waitingSeqNum; i < seqNum; ++i)
+      for (uint16_t i = m_waitingSeqNum; i < seqNum; ++i)
         {
           if ((m_sendQueueBack + 1) % m_sendQueueSize == m_sendQueueFront)
             {

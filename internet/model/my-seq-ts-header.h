@@ -41,11 +41,11 @@ public:
   /**
    * \param seq the sequence number
    */
-  void SetSeq (uint32_t seq);
+  void SetSeq (uint16_t seq);
   /**
    * \return the sequence number
    */
-  uint32_t GetSeq (void) const;
+  uint16_t GetSeq (void) const;
   /**
    * \return the time stamp
    */
@@ -64,7 +64,7 @@ public:
   virtual uint32_t Deserialize (Buffer::Iterator start);
 
 private:
-  uint32_t m_seq; //!< Sequence number
+  uint16_t m_seq; //!< Sequence number
   uint64_t m_ts; //!< Timestamp
 };
 
